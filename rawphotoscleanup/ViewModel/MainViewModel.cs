@@ -1,4 +1,9 @@
 using GalaSoft.MvvmLight;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Windows.Media;
+using rawphotoscleanup.ImageProcessing;
 
 namespace rawphotoscleanup.ViewModel
 {
@@ -29,6 +34,102 @@ namespace rawphotoscleanup.ViewModel
             ////{
             ////    // Code runs "for real"
             ////}
+            fileItems = new ObservableCollection<ViewModel.FileItem>();
         }
+
+        private string lastDirectory;
+        public int Maximum { get { return FileItems.Count; } }
+        public int Progress => CurrentImageIndex + 1;
+
+        public string CurrentFileName { get { return FileItems[CurrentImageIndex].FullName; } }
+        public string SelectedMessage
+        {
+            get
+            {
+                var selected = fileItems.Count(p => p.IsChecked);
+                return $"{selected} of {ImageCount} selected";
+            }
+        }
+
+        public int ImageCount => FileItems.Count;
+        public string CurrentProgressMessage { get { return $"{CurrentImageIndex + 1} / {ImageCount}"; } }
+
+        private ObservableCollection<FileItem> fileItems;
+        public ObservableCollection<FileItem> FileItems
+        {
+            get { return fileItems; }
+        }
+
+        public void LoadDirectory(string directoryName)
+        {
+            lastDirectory = directoryName;
+            const string EXTENSION = "*.nef";
+            var files = Directory.GetFiles(directoryName, EXTENSION);
+            var items = files.Select(name => new FileItem(name));
+            fileItems.Clear();
+            foreach (var item in items)
+                fileItems.Add(item);
+            CurrentImageIndex = 0;
+            RaisePropertyChanged(() => Maximum);
+            RaisePropertyChanged(() => SelectedMessage);
+        }
+
+        internal void RefreshDirectory()
+        {
+            LoadDirectory(lastDirectory);
+        }
+
+        private int currentImageIndex;
+        public int CurrentImageIndex
+        {
+            get { return currentImageIndex; }
+            set
+            {
+                Set<int>(ref currentImageIndex, value);
+                RaisePropertyChanged(() => CurrentItem);
+                RaisePropertyChanged(() => CurrentFileName);
+                RaisePropertyChanged(() => CurrentProgressMessage);
+                RaisePropertyChanged(() => Progress);
+                LoadImage();
+            }
+        }
+
+        private void LoadImage()
+        {
+            var bitmapImage = BitmapImageTools.GetBitmapImage(CurrentItem.FullName, Properties.Settings.Default.DcrawExeName);
+            ImageSource = bitmapImage;
+        }
+
+        public void SelectPressed()
+        {
+            CurrentItem.ToggleChecked();
+            RaisePropertyChanged(() => SelectedMessage);
+        }
+
+        public FileItem CurrentItem => FileItems[CurrentImageIndex];
+
+        internal void RightPressed()
+        {
+            if (CurrentImageIndex < ImageCount - 1)
+                CurrentImageIndex++;
+        }
+
+        internal void LeftPressed()
+        {
+            if (CurrentImageIndex > 0)
+                CurrentImageIndex--;
+        }
+
+        private ImageSource imageSource;
+        public ImageSource ImageSource
+        {
+            get { return imageSource; }
+            set
+            {
+                Set(ref imageSource, value);
+            }
+        }
+
+       
     }
 }

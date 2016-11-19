@@ -4,19 +4,30 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:rawphotoscleanup"
+        xmlns:vm="clr-namespace:rawphotoscleanup.ViewModel"
         mc:Ignorable="d"
-        Title="Raw Photos Cleanup" Height="350" Width="525">
-    <Grid>
+        Title="Raw Photos Cleanup" Height="350" Width="525" KeyUp="Window_KeyUp">
+    <Grid DataContext="{Binding MainViewModel, Source={StaticResource Locator}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Grid.Column="0" Background="Yellow">
-            <ProgressBar x:Name="progressBar" Value="33"></ProgressBar>
-            <TextBlock Text="0/1 selected" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 12 0"/>
-            <TextBlock Text="DSC00001.NEF" VerticalAlignment="Center" Margin="12 0 0 0"/>
-            <TextBlock Text="13/43" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="64"/>
+            </Grid.ColumnDefinitions>
+            <ProgressBar x:Name="progressBar" Value="{Binding Progress, Mode=OneWay}" Maximum="{Binding Maximum, Mode=OneWay}"></ProgressBar>
+            <TextBlock Text="{Binding SelectedMessage, Mode=OneWay}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 12 0"/>
+            <TextBlock Text="{Binding CurrentItem.Name, Mode=OneWay}" VerticalAlignment="Center" Margin="12 0 0 0"/>
+            <TextBlock Text="{Binding CurrentProgressMessage, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <Button Content="📂" Grid.Column="1" Width="32" Click="Button_Click" />
+                <Button Content="🗑" Grid.Column="1" Width="32" Click="Button_Click_1" />
+            </StackPanel>
         </Grid>
-        <Image Grid.Row="1"></Image>
+        <Image Grid.Row="1" x:Name="image" Source="{Binding ImageSource}"></Image>
+        <TextBlock Text="X" Grid.Row="1" HorizontalAlignment="Right" FontFamily="Comic Sans MS" FontSize="72" FontWeight="Bold" Margin="0 0 16 0" Foreground="Red"
+                   Visibility="{Binding CurrentItem.IsChecked, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Collapsed}"/>
     </Grid>
 </Window>
