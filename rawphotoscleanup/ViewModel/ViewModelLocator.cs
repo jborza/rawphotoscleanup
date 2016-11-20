@@ -43,6 +43,7 @@ namespace rawphotoscleanup.ViewModel
             ////    SimpleIoc.Default.Register<IDataService, DataService>();
             ////}
             SimpleIoc.Default.Register<ILastSelectedPathManager, LastSelectedPathManager>();
+            SimpleIoc.Default.Register<IMessageBoxService, WpfMessageService>();
             SimpleIoc.Default.Register<MainViewModel>();
         }
 

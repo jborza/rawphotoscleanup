@@ -9,6 +9,7 @@ using GalaSoft.MvvmLight.Command;
 using System;
 using rawphotoscleanup.UserSettings;
 using System.Windows.Forms;
+using Microsoft.VisualBasic.FileIO;
 
 namespace rawphotoscleanup.ViewModel
 {
@@ -27,10 +28,12 @@ namespace rawphotoscleanup.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private ILastSelectedPathManager lastSelectedPathManager;
+        private IMessageBoxService messageBoxService;
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public MainViewModel(ILastSelectedPathManager lastSelectedPathManager)
+        public MainViewModel(ILastSelectedPathManager lastSelectedPathManager, IMessageBoxService messageBoxService)
         {
             ////if (IsInDesignMode)
             ////{
@@ -41,6 +44,7 @@ namespace rawphotoscleanup.ViewModel
             ////    // Code runs "for real"
             ////}
             this.lastSelectedPathManager = lastSelectedPathManager;
+            this.messageBoxService = messageBoxService;
             fileItems = new ObservableCollection<ViewModel.FileItem>();
             OpenDirectoryCommand = new RelayCommand(OpenDirectory);
             DeleteFilesCommand = new RelayCommand(DeleteFiles);
@@ -188,7 +192,14 @@ namespace rawphotoscleanup.ViewModel
 
         private void DeleteFiles()
         {
-
+            var caption = "Do you want to delete the following items?";
+            var filesToDelete = FileItems.Where(p => p.IsChecked);
+            var content = string.Join(Environment.NewLine, filesToDelete.Select(p => p.Name));
+            if (messageBoxService.ShowMessageYesNo(content, caption) == false)
+                return;
+            foreach (var f in filesToDelete)
+                Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(f.FullName, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+            RefreshDirectory();
         }
     }
 }

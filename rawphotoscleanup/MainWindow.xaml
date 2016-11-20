@@ -23,7 +23,7 @@
             <TextBlock Text="{Binding CurrentProgressMessage, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" />
             <StackPanel Grid.Column="1" Orientation="Horizontal">
                 <Button Content="📂" Grid.Column="1" Width="32" Command="{Binding OpenDirectoryCommand}" />
-                <Button Content="🗑" Grid.Column="1" Width="32" Click="Button_Click_1" />
+                <Button Content="🗑" Grid.Column="1" Width="32" Command="{Binding DeleteFilesCommand}" />
             </StackPanel>
         </Grid>
         <Image Grid.Row="1" x:Name="image" Source="{Binding ImageSource}"></Image>

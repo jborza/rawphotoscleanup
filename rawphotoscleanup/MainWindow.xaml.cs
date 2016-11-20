@@ -54,25 +54,6 @@ namespace rawphotoscleanup
             if (vm == null)
                 return;
             vm.HandleKeyPressed(e.Key);
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //open a directory
-            
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            //collect all items to delete
-            var caption = "Do you want to delete the following items?";
-            var filesToDelete = vm.FileItems.Where(p => p.IsChecked);
-            var content = string.Join(Environment.NewLine, filesToDelete.Select(p => p.Name));
-            if (MessageBox.Show(content, caption, MessageBoxButton.YesNo) != MessageBoxResult.Yes)
-                return;
-            foreach (var f in filesToDelete)
-                Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(f.FullName, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
-            vm.RefreshDirectory();
-        }
+        }        
     }
 }

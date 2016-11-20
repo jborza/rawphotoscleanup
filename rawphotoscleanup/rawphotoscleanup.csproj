@@ -79,11 +79,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ImageProcessing\BitmapImageTools.cs" />
+    <Compile Include="IMessageBoxService.cs" />
     <Compile Include="UserSettings\ILastSelectedPathManager.cs" />
     <Compile Include="UserSettings\LastSelectedPathManager.cs" />
     <Compile Include="ViewModel\FileItem.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="WpfMessageService.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
