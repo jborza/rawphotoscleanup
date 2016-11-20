@@ -29,11 +29,12 @@ namespace rawphotoscleanup.ViewModel
     {
         private ILastSelectedPathManager lastSelectedPathManager;
         private IMessageBoxService messageBoxService;
+        private IFolderBrowserService folderBrowserService;
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public MainViewModel(ILastSelectedPathManager lastSelectedPathManager, IMessageBoxService messageBoxService)
+        public MainViewModel(ILastSelectedPathManager lastSelectedPathManager, IMessageBoxService messageBoxService, IFolderBrowserService folderBrowserService)
         {
             ////if (IsInDesignMode)
             ////{
@@ -45,6 +46,7 @@ namespace rawphotoscleanup.ViewModel
             ////}
             this.lastSelectedPathManager = lastSelectedPathManager;
             this.messageBoxService = messageBoxService;
+            this.folderBrowserService = folderBrowserService;
             fileItems = new ObservableCollection<ViewModel.FileItem>();
             OpenDirectoryCommand = new RelayCommand(OpenDirectory);
             DeleteFilesCommand = new RelayCommand(DeleteFiles);
@@ -180,14 +182,11 @@ namespace rawphotoscleanup.ViewModel
 
         private void OpenDirectory()
         {
-            FolderBrowserDialog fd = new FolderBrowserDialog()
-            {
-                SelectedPath = lastSelectedPathManager.LastSelectedPath
-            };
-            if (fd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+            string selectedPath;
+            if (folderBrowserService.ShowDialog(lastSelectedPathManager.LastSelectedPath, out selectedPath) == false)
                 return;
-            lastSelectedPathManager.LastSelectedPath = fd.SelectedPath;
-            LoadDirectory(fd.SelectedPath);
+            lastSelectedPathManager.LastSelectedPath = selectedPath;
+            LoadDirectory(selectedPath);
         }
 
         private void DeleteFiles()

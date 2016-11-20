@@ -78,6 +78,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FolderBrowserService.cs" />
+    <Compile Include="IFolderBrowserService.cs" />
     <Compile Include="ImageProcessing\BitmapImageTools.cs" />
     <Compile Include="IMessageBoxService.cs" />
     <Compile Include="UserSettings\ILastSelectedPathManager.cs" />
