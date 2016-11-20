@@ -18,9 +18,6 @@ namespace rawphotoscleanup
         public MainWindow()
         {
             InitializeComponent();
-
-            //var name = @"c:\temp\foto\2016_09_01\DSC_1225.NEF ";
-            //ShowImage(name);
         }
 
         private MainViewModel vm { get { return ServiceLocator.Current.GetInstance<MainViewModel>(); } }
@@ -52,36 +49,11 @@ namespace rawphotoscleanup
             }
         }
 
-        //private void ShowImage(string name)
-        //{
-        //    var bi = GetBitmapImage(name, Properties.Settings.Default.DcrawExeName);
-        //    //image.LayoutTransform = new RotateTransform(GetOrientation());
-        //    image.Source = bi;
-        //    return;
-        //}
-
-
-
         private void Window_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Right)
-            {
-                vm.RightPressed();
-            }
-            else if (e.Key == Key.Left)
-            {
-                vm.LeftPressed();
-            }
-            else if (e.Key == Key.X)
-            {
-                //select
-                vm.SelectPressed();
-            }
-            //vm.LoadDirectory(@"c:\temp\foto\2016_09_01");
-            //var name = @"c:\temp\foto\2016_09_01\DSC_122"+e.Key.ToString().Substring(1)+".NEF ";
-            ////var img = GetImage(name, Properties.Settings.Default.DcrawExeName);
-
-            //ShowImage(name);
+            if (vm == null)
+                return;
+            vm.HandleKeyPressed(e.Key);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

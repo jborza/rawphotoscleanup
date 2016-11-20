@@ -4,6 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Windows.Media;
 using rawphotoscleanup.ImageProcessing;
+using System.Windows.Input;
+using GalaSoft.MvvmLight.Command;
+using System;
 
 namespace rawphotoscleanup.ViewModel
 {
@@ -48,6 +51,28 @@ namespace rawphotoscleanup.ViewModel
             {
                 var selected = fileItems.Count(p => p.IsChecked);
                 return $"{selected} of {ImageCount} selected";
+            }
+        }
+
+        internal void HandleKeyPressed(Key key)
+        {
+            switch (key)
+            {
+                case Key.Left:
+                    LeftPressed();
+                    return;
+                case Key.Right:
+                    RightPressed();
+                    return;
+                case Key.Home:
+                    HomePressed();
+                    return;
+                case Key.End:
+                    EndPressed();
+                    return;
+                case Key.X:
+                    SelectPressed();
+                    return;
             }
         }
 
@@ -100,13 +125,23 @@ namespace rawphotoscleanup.ViewModel
             ImageSource = bitmapImage;
         }
 
+        public FileItem CurrentItem => FileItems[CurrentImageIndex];
+
         public void SelectPressed()
         {
             CurrentItem.ToggleChecked();
             RaisePropertyChanged(() => SelectedMessage);
         }
 
-        public FileItem CurrentItem => FileItems[CurrentImageIndex];
+        private void EndPressed()
+        {
+            CurrentImageIndex = ImageCount - 1;
+        }
+
+        private void HomePressed()
+        {
+            CurrentImageIndex = 0;
+        }
 
         internal void RightPressed()
         {
@@ -129,7 +164,5 @@ namespace rawphotoscleanup.ViewModel
                 Set(ref imageSource, value);
             }
         }
-
-       
     }
 }
