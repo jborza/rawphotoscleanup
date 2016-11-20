@@ -7,6 +7,8 @@ using rawphotoscleanup.ImageProcessing;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using System;
+using rawphotoscleanup.UserSettings;
+using System.Windows.Forms;
 
 namespace rawphotoscleanup.ViewModel
 {
@@ -24,10 +26,11 @@ namespace rawphotoscleanup.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
+        private ILastSelectedPathManager lastSelectedPathManager;
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public MainViewModel()
+        public MainViewModel(ILastSelectedPathManager lastSelectedPathManager)
         {
             ////if (IsInDesignMode)
             ////{
@@ -37,7 +40,10 @@ namespace rawphotoscleanup.ViewModel
             ////{
             ////    // Code runs "for real"
             ////}
+            this.lastSelectedPathManager = lastSelectedPathManager;
             fileItems = new ObservableCollection<ViewModel.FileItem>();
+            OpenDirectoryCommand = new RelayCommand(OpenDirectory);
+            DeleteFilesCommand = new RelayCommand(DeleteFiles);
         }
 
         private string lastDirectory;
@@ -163,6 +169,26 @@ namespace rawphotoscleanup.ViewModel
             {
                 Set(ref imageSource, value);
             }
+        }
+
+        public ICommand OpenDirectoryCommand { get; private set; }
+        public ICommand DeleteFilesCommand { get; private set; }
+
+        private void OpenDirectory()
+        {
+            FolderBrowserDialog fd = new FolderBrowserDialog()
+            {
+                SelectedPath = lastSelectedPathManager.LastSelectedPath
+            };
+            if (fd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                return;
+            lastSelectedPathManager.LastSelectedPath = fd.SelectedPath;
+            LoadDirectory(fd.SelectedPath);
+        }
+
+        private void DeleteFiles()
+        {
+
         }
     }
 }

@@ -15,6 +15,7 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
+using rawphotoscleanup.UserSettings;
 
 namespace rawphotoscleanup.ViewModel
 {
@@ -41,7 +42,7 @@ namespace rawphotoscleanup.ViewModel
             ////    // Create run time view services and models
             ////    SimpleIoc.Default.Register<IDataService, DataService>();
             ////}
-
+            SimpleIoc.Default.Register<ILastSelectedPathManager, LastSelectedPathManager>();
             SimpleIoc.Default.Register<MainViewModel>();
         }
 

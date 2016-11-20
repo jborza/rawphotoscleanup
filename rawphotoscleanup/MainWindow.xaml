@@ -22,7 +22,7 @@
             <TextBlock Text="{Binding CurrentItem.Name, Mode=OneWay}" VerticalAlignment="Center" Margin="12 0 0 0"/>
             <TextBlock Text="{Binding CurrentProgressMessage, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" />
             <StackPanel Grid.Column="1" Orientation="Horizontal">
-                <Button Content="📂" Grid.Column="1" Width="32" Click="Button_Click" />
+                <Button Content="📂" Grid.Column="1" Width="32" Command="{Binding OpenDirectoryCommand}" />
                 <Button Content="🗑" Grid.Column="1" Width="32" Click="Button_Click_1" />
             </StackPanel>
         </Grid>

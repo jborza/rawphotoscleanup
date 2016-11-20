@@ -59,18 +59,7 @@ namespace rawphotoscleanup
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             //open a directory
-            FolderBrowserDialog fd = new FolderBrowserDialog();
-            fd.SelectedPath = Properties.Settings.Default.LastPath;
-            if (fd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
-                return;
-            SaveSelectedPath(fd.SelectedPath);
-            vm.LoadDirectory(fd.SelectedPath);
-        }
-
-        private static void SaveSelectedPath(string selectedPath)
-        {
-            Properties.Settings.Default.LastPath = selectedPath;
-            Properties.Settings.Default.Save();
+            
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
